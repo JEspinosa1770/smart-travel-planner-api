@@ -9,6 +9,7 @@ import { SUPABASE_CLIENT } from '../supabase/supabase.provider';
 interface UserRecord {
   id: string;
   email: string;
+  role: string;
 }
 
 @Injectable()
@@ -33,7 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: { sub: string; email: string }) {
     const { data, error } = await this.supabase
       .from('profiles')
-      .select('id, email, raw_user_meta_data')
+      .select('id, email, role')
       .eq('id', payload.sub)
       .single();
 
@@ -46,6 +47,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       userId: typedUser.id,
       email: typedUser.email,
+      role: typedUser.role,
     };
   }
 }

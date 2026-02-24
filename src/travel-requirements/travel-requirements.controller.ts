@@ -6,7 +6,6 @@ import {
   Delete,
   Body,
   Param,
-  UseGuards,
   Req,
   HttpCode,
   HttpStatus,
@@ -20,7 +19,6 @@ import {
 import { TravelRequirementsService } from './travel-requirements.service';
 import { CreateTravelRequirementsDto } from './dto/create-travel-requirements.dto';
 import { UpdateTravelRequirementsDto } from './dto/update-travel-requirements.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 interface RequestWithUser extends Request {
   user: {
@@ -32,7 +30,6 @@ interface RequestWithUser extends Request {
 
 @ApiTags('Travel Requirements')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('travel-requirements')
 export class TravelRequirementsController {
   constructor(

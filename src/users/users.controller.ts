@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Put,
-  Delete,
-  Body,
-  Param,
-  UseGuards,
-  Req,
-  ForbiddenException,
-} from '@nestjs/common';
+import { Controller, Get, Put, Delete, Body, Param, Req } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -17,7 +7,7 @@ import {
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
 interface RequestWithUser extends Request {
   user: {
@@ -29,18 +19,15 @@ interface RequestWithUser extends Request {
 
 @ApiTags('Users')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @Roles('admin')
   @ApiOperation({ summary: 'Get all users (admin only)' })
   @ApiResponse({ status: 200, description: 'List of users' })
-  async findAll(@Req() req: RequestWithUser) {
-    if (req.user.role !== 'admin') {
-      throw new ForbiddenException('Access restricted to admins');
-    }
+  async findAll() {
     return this.usersService.findAll();
   }
 
@@ -51,11 +38,9 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Roles('admin')
   @ApiOperation({ summary: 'Get user by id (admin only)' })
-  async findOne(@Param('id') id: string, @Req() req: RequestWithUser) {
-    if (req.user.role !== 'admin') {
-      throw new ForbiddenException('Access restricted to admins');
-    }
+  async findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
 
@@ -69,24 +54,16 @@ export class UsersController {
   }
 
   @Put(':id')
+  @Roles('admin')
   @ApiOperation({ summary: 'Update user by id (admin only)' })
-  async update(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-    @Req() req: RequestWithUser,
-  ) {
-    if (req.user.role !== 'admin') {
-      throw new ForbiddenException('Access restricted to admins');
-    }
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
+  @Roles('admin')
   @ApiOperation({ summary: 'Delete user (admin only)' })
-  async remove(@Param('id') id: string, @Req() req: RequestWithUser) {
-    if (req.user.role !== 'admin') {
-      throw new ForbiddenException('Access restricted to admins');
-    }
+  async remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
 }

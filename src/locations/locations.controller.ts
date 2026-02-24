@@ -6,7 +6,6 @@ import {
   Delete,
   Body,
   Param,
-  UseGuards,
   Req,
   HttpCode,
   HttpStatus,
@@ -20,7 +19,6 @@ import {
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 interface RequestWithUser extends Request {
   user: {
@@ -32,7 +30,6 @@ interface RequestWithUser extends Request {
 
 @ApiTags('Locations')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('locations')
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}

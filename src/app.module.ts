@@ -10,6 +10,7 @@ import { TravelRequirementsModule } from './travel-requirements/travel-requireme
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './common/guards/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { TripMembersModule } from './trip-members/trip-members.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     LocationsModule,
     ActivitiesModule,
     TravelRequirementsModule,
+    TripMembersModule,
   ],
   controllers: [],
   providers: [

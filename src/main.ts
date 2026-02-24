@@ -7,9 +7,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:4200'],
+    origin: [
+      'http://localhost:4200',
+      // añadir las URLs de producción cuando estén
+    ],
   });
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -27,6 +29,7 @@ async function bootstrap() {
     .addTag('Trips')
     .addTag('Locations')
     .addTag('Activities')
+    .addTag('Travel Requirements')
     .addBearerAuth()
     .build();
 
@@ -35,11 +38,11 @@ async function bootstrap() {
 
   const PORT = process.env.PORT || 3000;
   await app.listen(PORT);
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Swagger available at http://localhost:${PORT}/api-docs`);
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`Swagger disponible en http://localhost:${PORT}/api-docs`);
 }
 
 bootstrap().catch((err) => {
-  console.error('Error starting application:', err);
+  console.error('Error arrancando la aplicación:', err);
   process.exit(1);
 });

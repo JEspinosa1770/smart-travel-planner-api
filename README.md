@@ -1,98 +1,225 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Smart Travel Planner API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para la gestión de viajes, localizaciones y actividades. Permite a los usuarios crear y gestionar itinerarios personalizados, añadir colaboradores a sus viajes y organizar actividades con fechas, costes y categorías.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Índice
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. [Tecnologías utilizadas](#tecnologías-utilizadas)
+2. [Requisitos previos](#requisitos-previos)
+3. [Instalación](#instalación)
+4. [Variables de entorno](#variables-de-entorno)
+5. [Ejecución](#ejecución)
+6. [Documentación de la API](#documentación-de-la-api)
+7. [Módulos](#módulos)
+8. [Autenticación](#autenticación)
+9. [Roles y permisos](#roles-y-permisos)
+10. [Base de datos](#base-de-datos)
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## Tecnologías utilizadas
 
-## Compile and run the project
+| Tecnología | Versión | Uso |
+|---|---|---|
+| [NestJS](https://nestjs.com/) | 11.x | Framework principal |
+| [TypeScript](https://www.typescriptlang.org/) | 5.x | Lenguaje de programación |
+| [Supabase](https://supabase.com/) | 2.x | Base de datos (PostgreSQL) |
+| [Passport.js](https://www.passportjs.org/) | - | Middleware de autenticación |
+| [JWT](https://jwt.io/) | - | Tokens de autenticación propios |
+| [bcrypt](https://github.com/kelektiv/node.bcrypt.js) | - | Hashing de contraseñas |
+| [class-validator](https://github.com/typestack/class-validator) | - | Validación de DTOs |
+| [class-transformer](https://github.com/typestack/class-transformer) | - | Transformación de datos |
+| [Swagger](https://swagger.io/) | - | Documentación de la API |
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## Requisitos previos
 
-# production mode
-$ npm run start:prod
-```
+- Node.js v18 o superior
+- npm v9 o superior
+- Cuenta y proyecto activo en [Supabase](https://supabase.com/)
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Instalación
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Clonar el repositorio
+git clone https://github.com/JEspinosa1770/smart-travel-planner-api
+cd smart-travel-planner-api
+
+# Instalar dependencias
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## Variables de entorno
 
-Check out a few resources that may come in handy when working with NestJS:
+Copia el archivo .env.example incluido en el repositorio y renómbralo a .env:
+```bash
+cp .env.example .env
+```
+Rellena las variables con tus propios valores:
+```env
+PORT=3000
+SUPABASE_URL=https://tu-project-id.supabase.co
+SUPABASE_ANON_KEY=tu_anon_key
+SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key
+JWT_SECRET=tu_jwt_secret_largo_y_aleatorio
+JWT_EXPIRATION_TIME=3600s
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+> ⚠️ Nunca subas el archivo `.env` al repositorio. Está incluido en `.gitignore`.
 
-## Support
+Las claves de Supabase se encuentran en **Settings → API** del panel de tu proyecto.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## Ejecución
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Desarrollo (con hot reload)
+npm run start:dev
 
-## License
+# Producción
+npm run build
+npm run start:prod
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## Documentación de la API
+
+Con el servidor en marcha, la documentación Swagger está disponible en:
+
+```
+http://localhost:3000/api-docs
+```
+
+Para probar los endpoints protegidos:
+1. Ejecuta `POST /auth/login` y copia el `access_token`.
+2. Haz clic en el botón **Authorize** (arriba a la derecha en Swagger).
+3. Pega el token y confirma.
+
+---
+
+## Módulos
+
+### Auth
+Gestión de registro e inicio de sesión. Genera tokens JWT propios, independientes de Supabase Auth.
+
+| Método | Endpoint | Descripción | Protegido |
+|---|---|---|---|
+| POST | `/auth/register` | Registra un nuevo usuario | No |
+| POST | `/auth/login` | Inicia sesión y obtiene un JWT | No |
+
+### Users
+Gestión de perfiles de usuario. Los usuarios pueden ver y editar su propio perfil. Los administradores pueden gestionar todos los usuarios.
+
+| Método | Endpoint | Descripción | Rol requerido |
+|---|---|---|---|
+| GET | `/users` | Lista todos los usuarios | admin |
+| GET | `/users/me` | Obtiene el perfil propio | user |
+| GET | `/users/:id` | Obtiene un usuario por id | admin |
+| PUT | `/users/me` | Actualiza el perfil propio | user |
+| PUT | `/users/:id` | Actualiza un usuario por id | admin |
+| DELETE | `/users/:id` | Elimina un usuario | admin |
+
+### Trips
+CRUD de viajes. Cada viaje pertenece a un usuario creador y puede ser público o privado.
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/trips` | Crea un nuevo viaje |
+| GET | `/trips/public` | Lista todos los viajes públicos |
+| GET | `/trips/my-trips` | Lista los viajes propios |
+| GET | `/trips/:id` | Obtiene un viaje por id |
+| PUT | `/trips/:id` | Actualiza un viaje |
+| DELETE | `/trips/:id` | Elimina un viaje |
+
+### Trip Members
+Gestión de colaboradores en un viaje. Solo el owner del viaje puede gestionar miembros.
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/trips/:tripId/members` | Añade un colaborador al viaje |
+| GET | `/trips/:tripId/members` | Lista los miembros del viaje |
+| PUT | `/trips/:tripId/members/:memberId/role` | Actualiza el rol de un miembro |
+| DELETE | `/trips/:tripId/members/:memberId` | Elimina un miembro del viaje |
+
+### Locations
+CRUD de localizaciones. Son entidades reutilizables que pueden asociarse a actividades de cualquier viaje.
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/locations` | Crea una nueva localización |
+| GET | `/locations` | Lista todas las localizaciones |
+| GET | `/locations/:id` | Obtiene una localización por id |
+| PUT | `/locations/:id` | Actualiza una localización |
+| DELETE | `/locations/:id` | Elimina una localización |
+
+### Activities
+CRUD de actividades. Cada actividad pertenece a un viaje y opcionalmente a una localización. Tanto el owner como los colaboradores del viaje pueden gestionar actividades.
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/activities` | Crea una nueva actividad |
+| GET | `/activities/trip/:tripId` | Lista las actividades de un viaje |
+| GET | `/activities/:id` | Obtiene una actividad por id |
+| PUT | `/activities/:id` | Actualiza una actividad |
+| DELETE | `/activities/:id` | Elimina una actividad |
+
+### Travel Requirements
+Gestión de requisitos de viaje (documentación, salud, moneda). Cada viaje puede tener un único registro de requisitos.
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/travel-requirements` | Crea los requisitos de un viaje |
+| GET | `/travel-requirements/trip/:tripId` | Obtiene los requisitos de un viaje |
+| PUT | `/travel-requirements/trip/:tripId` | Actualiza los requisitos de un viaje |
+| DELETE | `/travel-requirements/trip/:tripId` | Elimina los requisitos de un viaje |
+
+---
+
+## Autenticación
+
+El backend utiliza **JWT propio**, independiente de Supabase Auth. Esto garantiza que el sistema es agnóstico respecto a la base de datos utilizada.
+
+El flujo de autenticación es:
+1. El usuario se registra o inicia sesión.
+2. El backend valida las credenciales contra la tabla `profiles` de Supabase.
+3. El backend genera y firma un JWT con su propio `JWT_SECRET`.
+4. El cliente incluye el token en cada request en la cabecera `Authorization: Bearer <token>`.
+
+Todos los endpoints están protegidos por defecto excepto `POST /auth/register` y `POST /auth/login`, que están marcados como públicos con el decorador `@Public()`.
+
+---
+
+## Roles y permisos
+
+El sistema cuenta con dos roles:
+
+- **user** — rol por defecto. Puede gestionar sus propios viajes, localizaciones y actividades.
+- **admin** — puede gestionar todos los usuarios del sistema.
+
+Los roles se gestionan mediante el decorador `@Roles('admin')` y el guard global `RolesGuard`.
+
+---
+
+## Base de datos
+
+El proyecto utiliza **Supabase (PostgreSQL)** como base de datos. Las tablas principales son:
+
+| Tabla | Descripción |
+|---|---|
+| `profiles` | Usuarios de la aplicación |
+| `trips` | Viajes creados por los usuarios |
+| `trip_members` | Colaboradores de cada viaje |
+| `locations` | Localizaciones reutilizables |
+| `activities` | Actividades dentro de un viaje |
+| `travel_requirements` | Requisitos de documentación, salud y moneda por viaje |
+
+La capa de acceso a datos está completamente desacoplada mediante el patrón de inyección de dependencias de NestJS. Si en el futuro se cambia de base de datos, solo es necesario reemplazar los servicios, sin tocar controladores ni lógica de negocio.

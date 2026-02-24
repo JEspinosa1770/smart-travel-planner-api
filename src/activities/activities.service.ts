@@ -46,7 +46,10 @@ export class ActivitiesService {
     category: activity.category,
   });
 
-  private async verifyTripOwner(tripId: string, userId: string): Promise<void> {
+  private async verifyTripAccess(
+    tripId: string,
+    userId: string,
+  ): Promise<void> {
     const { data: rawData, error } = await this.supabase
       .from('trips')
       .select('id, user_id')
@@ -59,10 +62,19 @@ export class ActivitiesService {
 
     const trip = rawData as TripRecord;
 
-    if (trip.user_id !== userId) {
-      throw new ForbiddenException(
-        'You do not have permission to manage activities in this trip',
-      );
+    if (trip.user_id === userId) {
+      return;
+    }
+
+    const { data: member } = await this.supabase
+      .from('trip_members')
+      .select('id')
+      .eq('trip_id', tripId)
+      .eq('user_id', userId)
+      .single();
+
+    if (!member) {
+      throw new ForbiddenException('You do not have access to this trip');
     }
   }
 
@@ -70,7 +82,7 @@ export class ActivitiesService {
     createActivityDto: CreateActivityDto,
     userId: string,
   ): Promise<ActivityResponseDto> {
-    await this.verifyTripOwner(createActivityDto.trip_id, userId);
+    await this.verifyTripAccess(createActivityDto.trip_id, userId);
 
     const { data: rawData, error } = await this.supabase
       .from('activities')
@@ -89,7 +101,7 @@ export class ActivitiesService {
     tripId: string,
     userId: string,
   ): Promise<ActivityResponseDto[]> {
-    await this.verifyTripOwner(tripId, userId);
+    await this.verifyTripAccess(tripId, userId);
 
     const { data: rawData, error } = await this.supabase
       .from('activities')
@@ -115,7 +127,7 @@ export class ActivitiesService {
     }
 
     const activity = rawData as ActivityRecord;
-    await this.verifyTripOwner(activity.trip_id, userId);
+    await this.verifyTripAccess(activity.trip_id, userId);
 
     return this.mapActivity(activity);
   }

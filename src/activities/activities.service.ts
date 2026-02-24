@@ -1,0 +1,158 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { SUPABASE_CLIENT } from '../supabase/supabase.provider';
+import { CreateActivityDto } from './dto/create-activity.dto';
+import { UpdateActivityDto } from './dto/update-activity.dto';
+import { ActivityResponseDto } from './dto/activity-response.dto';
+
+interface ActivityRecord {
+  id: string;
+  title: string;
+  trip_id: string;
+  location_id?: string;
+  start_time?: string;
+  end_time?: string;
+  cost?: number;
+  user_notes?: string;
+  category?: string;
+}
+
+interface TripRecord {
+  id: string;
+  user_id: string;
+}
+
+@Injectable()
+export class ActivitiesService {
+  constructor(
+    @Inject(SUPABASE_CLIENT) private readonly supabase: SupabaseClient,
+  ) {}
+
+  private mapActivity = (activity: ActivityRecord): ActivityResponseDto => ({
+    id: activity.id,
+    title: activity.title,
+    trip_id: activity.trip_id,
+    location_id: activity.location_id,
+    start_time: activity.start_time,
+    end_time: activity.end_time,
+    cost: activity.cost,
+    user_notes: activity.user_notes,
+    category: activity.category,
+  });
+
+  private async verifyTripOwner(tripId: string, userId: string): Promise<void> {
+    const { data: rawData, error } = await this.supabase
+      .from('trips')
+      .select('id, user_id')
+      .eq('id', tripId)
+      .single();
+
+    if (error || !rawData) {
+      throw new NotFoundException(`Trip with id ${tripId} not found`);
+    }
+
+    const trip = rawData as TripRecord;
+
+    if (trip.user_id !== userId) {
+      throw new ForbiddenException(
+        'You do not have permission to manage activities in this trip',
+      );
+    }
+  }
+
+  async create(
+    createActivityDto: CreateActivityDto,
+    userId: string,
+  ): Promise<ActivityResponseDto> {
+    await this.verifyTripOwner(createActivityDto.trip_id, userId);
+
+    const { data: rawData, error } = await this.supabase
+      .from('activities')
+      .insert(createActivityDto)
+      .select()
+      .single();
+
+    if (error || !rawData) {
+      throw new NotFoundException(error?.message ?? 'Error creating activity');
+    }
+
+    return this.mapActivity(rawData as ActivityRecord);
+  }
+
+  async findByTrip(
+    tripId: string,
+    userId: string,
+  ): Promise<ActivityResponseDto[]> {
+    await this.verifyTripOwner(tripId, userId);
+
+    const { data: rawData, error } = await this.supabase
+      .from('activities')
+      .select()
+      .eq('trip_id', tripId);
+
+    if (error) {
+      throw new NotFoundException(error.message);
+    }
+
+    return (rawData as ActivityRecord[]).map(this.mapActivity);
+  }
+
+  async findOne(id: string, userId: string): Promise<ActivityResponseDto> {
+    const { data: rawData, error } = await this.supabase
+      .from('activities')
+      .select()
+      .eq('id', id)
+      .single();
+
+    if (error || !rawData) {
+      throw new NotFoundException(`Activity with id ${id} not found`);
+    }
+
+    const activity = rawData as ActivityRecord;
+    await this.verifyTripOwner(activity.trip_id, userId);
+
+    return this.mapActivity(activity);
+  }
+
+  async update(
+    id: string,
+    updateActivityDto: UpdateActivityDto,
+    userId: string,
+  ): Promise<ActivityResponseDto> {
+    await this.findOne(id, userId);
+
+    const { data: rawData, error } = await this.supabase
+      .from('activities')
+      .update(updateActivityDto)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error || !rawData) {
+      throw new NotFoundException(error?.message ?? 'Error updating activity');
+    }
+
+    return this.mapActivity(rawData as ActivityRecord);
+  }
+
+  async remove(id: string, userId: string): Promise<{ message: string }> {
+    await this.findOne(id, userId);
+
+    const { error } = await this.supabase
+      .from('activities')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw new NotFoundException(error.message);
+    }
+
+    return { message: 'Activity deleted successfully' };
+  }
+}

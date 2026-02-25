@@ -16,6 +16,7 @@ API REST para la gestión de viajes, localizaciones y actividades. Permite a los
 8. [Autenticación](#autenticación)
 9. [Roles y permisos](#roles-y-permisos)
 10. [Base de datos](#base-de-datos)
+11. [Tests](#tests)
 
 ---
 
@@ -223,3 +224,16 @@ El proyecto utiliza **Supabase (PostgreSQL)** como base de datos. Las tablas pri
 | `travel_requirements` | Requisitos de documentación, salud y moneda por viaje |
 
 La capa de acceso a datos está completamente desacoplada mediante el patrón de inyección de dependencias de NestJS. Si en el futuro se cambia de base de datos, solo es necesario reemplazar los servicios, sin tocar controladores ni lógica de negocio.
+
+## Tests
+
+El proyecto incluye tests unitarios de los módulos más críticos: Auth, Guards, Trips, Activities y Users.
+
+Para ejecutarlos:
+```bash
+# Ejecutar todos los tests
+npm test
+
+# Ejecutar con informe de cobertura
+npm run test:cov
+```

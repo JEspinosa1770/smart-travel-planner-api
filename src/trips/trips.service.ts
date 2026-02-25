@@ -40,7 +40,7 @@ export class TripsService {
       .single();
 
     if (error || !rawData) {
-      throw new NotFoundException(error?.message ?? 'Error creating trip');
+      throw new NotFoundException(error?.message ?? 'Error creando el viaje');
     }
 
     const data = rawData as TripRecord;
@@ -111,13 +111,13 @@ export class TripsService {
       .single();
 
     if (error || !rawData) {
-      throw new NotFoundException(`Trip with id ${id} not found`);
+      throw new NotFoundException(`Viaje con id ${id} no encontrado`);
     }
 
     const trip = rawData as TripRecord;
 
     if (!trip.is_public && trip.user_id !== userId) {
-      throw new ForbiddenException('You do not have access to this trip');
+      throw new ForbiddenException('No tienes acceso a este viaje');
     }
 
     return {
@@ -141,9 +141,7 @@ export class TripsService {
     const trip = await this.findOne(id, userId);
 
     if (trip.user_id !== userId) {
-      throw new ForbiddenException(
-        'You do not have permission to edit this trip',
-      );
+      throw new ForbiddenException('No tienes permiso para editar este viaje');
     }
 
     const { data: rawData, error } = await this.supabase
@@ -154,7 +152,9 @@ export class TripsService {
       .single();
 
     if (error || !rawData) {
-      throw new NotFoundException(error?.message ?? 'Error updating trip');
+      throw new NotFoundException(
+        error?.message ?? 'Error actualizando el viaje',
+      );
     }
 
     const data = rawData as TripRecord;
@@ -175,9 +175,7 @@ export class TripsService {
     const trip = await this.findOne(id, userId);
 
     if (trip.user_id !== userId) {
-      throw new ForbiddenException(
-        'You do not have permission to delete this trip',
-      );
+      throw new ForbiddenException('No tienes permiso para borrar este viaje');
     }
 
     const { error } = await this.supabase.from('trips').delete().eq('id', id);
@@ -186,6 +184,6 @@ export class TripsService {
       throw new NotFoundException(error.message);
     }
 
-    return { message: 'Trip deleted successfully' };
+    return { message: 'Viaje borrado correctamente' };
   }
 }

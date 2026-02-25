@@ -17,6 +17,7 @@ API REST para la gestión de viajes, localizaciones y actividades. Permite a los
 9. [Roles y permisos](#roles-y-permisos)
 10. [Base de datos](#base-de-datos)
 11. [Tests](#tests)
+12. [Estado del Proyecto e Invitación a Colaborar](#estado-del-proyecto-e-invitación-a-colaborar)
 
 ---
 
@@ -237,3 +238,18 @@ npm test
 # Ejecutar con informe de cobertura
 npm run test:cov
 ```
+
+## Estado del Proyecto e Invitación a Colaborar
+
+Este proyecto nació como el trabajo final del bootcamp de desarrollo Frontend con **Angular**. Actualmente se encuentra en una fase de **desarrollo activo** y mejora continua.
+
+### ¿Quieres contribuir?
+¡Cualquier sugerencia o mejora es bienvenida! Si encuentras un bug o tienes una idea para una nueva funcionalidad:
+1. Haz un **Fork** del repositorio.
+2. Crea una rama para tu mejora (`git checkout -b feature/MejoraIncreible`).
+3. Envía un **Pull Request** detallando los cambios.
+
+También puedes abrir un [Issue](https://github.com) para discutir ideas nuevas.
+
+### Licencia
+Este proyecto está bajo la **Licencia Apache 2.0**. Para más detalles, consulta el archivo [LICENSE](./LICENSE) en este repositorio.

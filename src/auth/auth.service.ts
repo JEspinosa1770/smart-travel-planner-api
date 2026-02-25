@@ -34,7 +34,7 @@ export class AuthService {
       .single();
 
     if (existingUser) {
-      throw new ConflictException('Email already in use');
+      throw new ConflictException('Email ya existente');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,7 +48,7 @@ export class AuthService {
       throw new ConflictException(error.message);
     }
 
-    return { message: 'User registered successfully' };
+    return { message: 'Usuario registrado correctamente' };
   }
 
   async login(loginDto: LoginDto): Promise<{ access_token: string }> {
@@ -61,7 +61,7 @@ export class AuthService {
       .single();
 
     if (error || !user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Credenciales inválidas');
     }
 
     const typedUser = user as UserRecord;
@@ -72,7 +72,7 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Credenciales inválidas');
     }
 
     const payload = { sub: typedUser.id, email: typedUser.email };

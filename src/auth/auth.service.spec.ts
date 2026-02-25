@@ -29,8 +29,6 @@ describe('AuthService', () => {
     jest.clearAllMocks();
   });
 
-  // --- REGISTER ---
-
   describe('register', () => {
     it('debería registrar un usuario correctamente y devolver un mensaje', async () => {
       mockSupabase.from.mockReturnValueOnce({
@@ -53,7 +51,7 @@ describe('AuthService', () => {
         password: '123456',
       });
 
-      expect(result).toEqual({ message: 'User registered successfully' });
+      expect(result).toEqual({ message: 'Usuario registrado correctamente' });
     });
 
     it('debería lanzar ConflictException si el email ya existe', async () => {
@@ -74,8 +72,6 @@ describe('AuthService', () => {
       ).rejects.toThrow(ConflictException);
     });
   });
-
-  // --- LOGIN ---
 
   describe('login', () => {
     it('debería devolver un access_token con credenciales correctas', async () => {

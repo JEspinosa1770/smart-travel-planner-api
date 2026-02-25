@@ -32,7 +32,7 @@ export class RolesGuard implements CanActivate {
 
     if (!requiredRoles.includes(user.role)) {
       throw new ForbiddenException(
-        'Access restricted to: ' + requiredRoles.join(', '),
+        'Acceso restringido a: ' + requiredRoles.join(', '),
       );
     }
 

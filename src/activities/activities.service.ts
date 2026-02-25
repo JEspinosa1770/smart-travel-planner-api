@@ -57,7 +57,7 @@ export class ActivitiesService {
       .single();
 
     if (error || !rawData) {
-      throw new NotFoundException(`Trip with id ${tripId} not found`);
+      throw new NotFoundException(`Viaje con id ${tripId} no encontrado`);
     }
 
     const trip = rawData as TripRecord;
@@ -74,7 +74,7 @@ export class ActivitiesService {
       .single();
 
     if (!member) {
-      throw new ForbiddenException('You do not have access to this trip');
+      throw new ForbiddenException('No tienes acceso a este viaje');
     }
   }
 
@@ -91,7 +91,9 @@ export class ActivitiesService {
       .single();
 
     if (error || !rawData) {
-      throw new NotFoundException(error?.message ?? 'Error creating activity');
+      throw new NotFoundException(
+        error?.message ?? 'Error creando la actividad',
+      );
     }
 
     return this.mapActivity(rawData as ActivityRecord);
@@ -123,7 +125,7 @@ export class ActivitiesService {
       .single();
 
     if (error || !rawData) {
-      throw new NotFoundException(`Activity with id ${id} not found`);
+      throw new NotFoundException(`Actividad con id ${id} no encontrada`);
     }
 
     const activity = rawData as ActivityRecord;
@@ -147,7 +149,9 @@ export class ActivitiesService {
       .single();
 
     if (error || !rawData) {
-      throw new NotFoundException(error?.message ?? 'Error updating activity');
+      throw new NotFoundException(
+        error?.message ?? 'Error actualizando la actividad',
+      );
     }
 
     return this.mapActivity(rawData as ActivityRecord);
@@ -165,6 +169,6 @@ export class ActivitiesService {
       throw new NotFoundException(error.message);
     }
 
-    return { message: 'Activity deleted successfully' };
+    return { message: 'Actividad borrada correctamente' };
   }
 }

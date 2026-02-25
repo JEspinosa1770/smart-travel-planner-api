@@ -50,7 +50,7 @@ export class UsersService {
       .single();
 
     if (error || !data) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     }
 
     const user = data as UserRecord;
@@ -87,7 +87,9 @@ export class UsersService {
       .single();
 
     if (error || !data) {
-      throw new ConflictException(error?.message ?? 'Error updating user');
+      throw new ConflictException(
+        error?.message ?? 'Error actualizando usuario',
+      );
     }
 
     const user = data as UserRecord;
@@ -111,6 +113,6 @@ export class UsersService {
       throw new NotFoundException(error.message);
     }
 
-    return { message: 'User deleted successfully' };
+    return { message: 'Usuario borrado correctamente' };
   }
 }
